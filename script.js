@@ -34,40 +34,51 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 function winnerAnouncement(gameWinner){
-    console.log("Game over");
-    console.log(`Player score ${playerScore}`);
-    console.log(`Computer score ${computerScore}`);
+    let gameOverMessageDiv = document.querySelector('#gameOverMessage');
+    let message =  `Game over \n Player score ${playerScore}\n Computer score ${computerScore}\n `
     if(gameWinner == 'player'){
-        console.log("Congratulations you won!");
+        message = message + `Congratulations you won!`;
     }
     if (gameWinner == 'computer'){
-        console.log("You lost. To bad, try again.")
+        message = message + `You lost. To bad, try again.`;
     }
+    gameOverMessageDiv.textContent = message;
 
 }
 
 function addPoints(winner,playerSelection, computerSelection){
+    let winnerMessageDiv = document.querySelector('#winnerMessage');
+    let playerScoreDiv = document.querySelector('#playerScore');
+    let computerScoreDiv = document.querySelector('#computerScore');
     if (winner== "tie"){
-        console.log("It's a tie. Try again!")
+        winnerMessageDiv.textContent = "It's a tie. Try again!";
     }else if(winner == "player"){
         winString = " You Won. " + capitalize(playerSelection) + " beats " + computerSelection + ".";
-        console.log(winString)
+        winnerMessageDiv.textContent = winString;
         playerScore += 1;
+        playerScoreDiv.textContent = playerScore;
     }else if (winner == "computer"){
         loseString = "You Lose. " + capitalize(computerSelection) + " beats " + playerSelection + ".";
-        console.log(loseString)
+        winnerMessageDiv.textContent = loseString;
         computerScore += 1;
+        computerScoreDiv.textContent = computerScore;
     }
 }
 
 function resetGame(){
+    let playerScoreDiv = document.querySelector('#playerScore');
+    let computerScoreDiv = document.querySelector('#computerScore');
     computerScore = 0;
     playerScore = 0;
+    computerScoreDiv.textContent = computerScore;
+    playerScoreDiv.textContent = playerScore;
 }
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
+        let gameOverMessageDiv = document.querySelector('#gameOverMessage');
+        gameOverMessageDiv.textContent = '';
         let computerSelection = computerPlay();
         let playerSelection = button.value;
         winner = playRound(playerSelection, computerSelection);
