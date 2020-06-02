@@ -1,4 +1,7 @@
 
+let computerScore = 0;
+let playerScore = 0;
+
 function capitalize(inputString){
     let firstLetter = inputString.charAt(0).toUpperCase();
     let stringWithoutFirstLetter = inputString.slice(1).toLowerCase();
@@ -25,50 +28,58 @@ function playRound(playerSelection, computerSelection) {
     }
     if ((playerSelection == 'rock' && computerSelection == 'scissor') || (playerSelection == 'scissor' && computerSelection == 'paper') || (playerSelection == 'paper' && computerSelection == 'rock')){
         return 'player'
+
     }else if ((playerSelection == 'rock' && computerSelection == 'paper') || (playerSelection == 'scissor' && computerSelection == 'rock') || (playerSelection == 'paper' && computerSelection == 'scissor')) {
         return 'computer'
     }
 }
-function winnerAnouncement(playerScore, computerScore){
+function winnerAnouncement(gameWinner){
     console.log("Game over");
     console.log(`Player score ${playerScore}`);
     console.log(`Computer score ${computerScore}`);
-    if (playerScore == computerScore){
-        console.log("It's a tie!")
-    }else if(playerScore > computerScore){
+    if(gameWinner == 'player'){
         console.log("Congratulations you won!");
-    }else{
+    }
+    if (gameWinner == 'computer'){
         console.log("You lost. To bad, try again.")
     }
+
 }
 
-function game(){
-    let computerScore = 0;
-    let playerScore = 0;
-    
-    let i = 0;
-    while (i < 5){
-        let playerSelection = prompt("Paper rock or scissor?").toLowerCase();
-        let computerSelection = computerPlay();
-        
-        
-        console.log("You choosed:" + playerSelection);
-        let winner = playRound(playerSelection, computerSelection);
-        if (winner== "tie"){
-            console.log("It's a tie. Try again!")
-        }else if(winner == "player"){
-            winString = " You Won. " + capitalize(playerSelection) + " beats " + computerSelection + ".";
-            console.log(winString)
-            playerScore += 1;
-        }else if (winner == "computer"){
-            loseString = "You Lose. " + capitalize(computerSelection) + " beats " + playerSelection + ".";
-            console.log(loseString)
-            computerScore += 1;
-        }
-        i += 1;
+function addPoints(winner,playerSelection, computerSelection){
+    if (winner== "tie"){
+        console.log("It's a tie. Try again!")
+    }else if(winner == "player"){
+        winString = " You Won. " + capitalize(playerSelection) + " beats " + computerSelection + ".";
+        console.log(winString)
+        playerScore += 1;
+    }else if (winner == "computer"){
+        loseString = "You Lose. " + capitalize(computerSelection) + " beats " + playerSelection + ".";
+        console.log(loseString)
+        computerScore += 1;
     }
-    winnerAnouncement(playerScore, computerScore);
 }
 
-game();
+function resetGame(){
+    computerScore = 0;
+    playerScore = 0;
+}
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        let computerSelection = computerPlay();
+        let playerSelection = button.value;
+        winner = playRound(playerSelection, computerSelection);
+        addPoints(winner, playerSelection, computerSelection);
+        if (computerScore == 5){
+            winnerAnouncement('computer');
+            resetGame();
+        }
+        if (playerScore == 5){
+            winnerAnouncement('player');
+            resetGame();
+        }
+    } );
+});
 
